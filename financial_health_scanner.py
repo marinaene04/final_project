@@ -14,7 +14,13 @@
 def load_companies(filename):
     """
     Reads company financial data from a text file.
-    Each line format: Name,Revenue,Costs,Debt,Cash,Employees
+    Each line format:
+      Name,Sector,Revenue,Costs,Debt,Cash,Employees
+
+    Notes:
+    - Lines starting with '#' are treated as comments and skipped.
+    - Revenue/Costs/Debt/Cash are floats (e.g., in millions).
+    - Employees is an integer.
     :param filename: string, path to the data file
     :return: dictionary where keys are company names and
              values are dictionaries with financial data
@@ -30,26 +36,28 @@ def load_companies(filename):
     for line in fp:
         line = line.strip()
 
-        # Skip empty lines
-        if len(line) == 0:
+        # Skip empty lines and comment lines
+        if len(line) == 0 or line.startswith("#"):
             continue
 
-        parts = line.split(",")
+        parts = [p.strip() for p in line.split(",")]
 
-        # We expect exactly 6 fields per line
-        if len(parts) != 6:
+        # We expect exactly 7 fields per line
+        if len(parts) != 7:
             print("Warning: Skipping bad line ->", line)
             continue
 
         try:
-            name = parts[0].strip()
-            revenue = float(parts[1].strip())
-            costs = float(parts[2].strip())
-            debt = float(parts[3].strip())
-            cash = float(parts[4].strip())
-            employees = int(parts[5].strip())
+            name = parts[0]
+            sector = parts[1]
+            revenue = float(parts[2])
+            costs = float(parts[3])
+            debt = float(parts[4])
+            cash = float(parts[5])
+            employees = int(parts[6])
 
             companies[name] = {
+                "sector": sector,
                 "revenue": revenue,
                 "costs": costs,
                 "debt": debt,
@@ -218,6 +226,7 @@ def analyze_company(name, data):
 
     result = {
         "name": name,
+        "sector": data.get("sector", ""),
         "revenue": revenue,
         "costs": costs,
         "profit_margin": profit_margin,
@@ -258,6 +267,8 @@ def display_result(result):
     print("")
     print("=" * 50)
     print("  COMPANY: " + result["name"])
+    if result.get("sector"):
+        print("  SECTOR:  " + result["sector"])
     print("=" * 50)
     print(f"  Revenue:            ${result['revenue']:,.0f}M")
     print(f"  Costs:              ${result['costs']:,.0f}M")
@@ -296,18 +307,21 @@ def display_ranking(results):
                 sorted_results[j] = temp
 
     print("")
-    print("=" * 55)
-    print("       FINANCIAL HEALTH RANKING")
-    print("=" * 55)
-    print(f"  {'Rank':<6}{'Company':<15}{'Grade':<8}{'Points':<10}{'Margin'}")
-    print("-" * 55)
+    print("=" * 70)
+    print("                 FINANCIAL HEALTH RANKING")
+    print("=" * 70)
+    print(f"  {'Rank':<6}{'Company':<18}{'Sector':<16}{'Grade':<8}{'Points':<10}{'Margin'}")
+    print("-" * 70)
 
     rank = 1
     for r in sorted_results:
-        print(f"  {rank:<6}{r['name']:<15}{r['grade']:<8}{r['points']}/9{'':<6}{r['profit_margin']}%")
+        print(
+            f"  {rank:<6}{r['name']:<18}{r.get('sector',''):<16}{r['grade']:<8}"
+            f"{r['points']}/9{'':<6}{r['profit_margin']}%"
+        )
         rank = rank + 1
 
-    print("=" * 55)
+    print("=" * 70)
 
 
 # -------------------- REPORT GENERATION --------------------
@@ -326,11 +340,14 @@ def save_report(results, filename):
         return False
 
     fp.write("COMPANY FINANCIAL HEALTH REPORT\n")
-    fp.write("=" * 50 + "\n\n")
+    fp.write("=" * 60 + "\n\n")
 
     for r in results:
         fp.write("Company: " + r["name"] + "\n")
+        if r.get("sector"):
+            fp.write("Sector:  " + r["sector"] + "\n")
         fp.write(f"  Revenue:          ${r['revenue']:,.0f}M\n")
+        fp.write(f"  Costs:            ${r['costs']:,.0f}M\n")
         fp.write(f"  Profit Margin:    {r['profit_margin']}%\n")
         fp.write(f"  Debt-to-Revenue:  {r['debt_ratio']}%\n")
 
@@ -341,7 +358,7 @@ def save_report(results, filename):
 
         fp.write(f"  Rev/Employee:     ${r['rev_per_employee']}M\n")
         fp.write(f"  GRADE:            {r['grade']} ({r['points']}/9)\n")
-        fp.write("-" * 50 + "\n\n")
+        fp.write("-" * 60 + "\n\n")
 
     fp.write("END OF REPORT\n")
     fp.close()
@@ -354,7 +371,6 @@ def save_report(results, filename):
 def get_company_from_user():
     """
     Asks the user to input financial data for a single company.
-    Uses try/except for input validation.
     :return: tuple of (name string, data dictionary) or None if cancelled
     """
     print("\n--- Enter Company Financial Data ---")
@@ -363,7 +379,8 @@ def get_company_from_user():
     if name.lower() == "quit" or len(name) == 0:
         return None
 
-    # Validate each numeric input with a while loop + try/except
+    sector = input("Sector (e.g., Technology): ").strip()
+
     revenue = get_valid_number("Revenue (in millions): ")
     costs = get_valid_number("Costs (in millions): ")
     debt = get_valid_number("Total Debt (in millions): ")
@@ -371,6 +388,7 @@ def get_company_from_user():
     employees = get_valid_integer("Number of Employees: ")
 
     data = {
+        "sector": sector,
         "revenue": revenue,
         "costs": costs,
         "debt": debt,
@@ -382,11 +400,7 @@ def get_company_from_user():
 
 
 def get_valid_number(prompt):
-    """
-    Keeps asking until the user enters a valid float number.
-    :param prompt: string, the message to display
-    :return: float, the validated number
-    """
+    """Keeps asking until the user enters a valid float number."""
     while True:
         try:
             value = float(input(prompt))
@@ -396,11 +410,7 @@ def get_valid_number(prompt):
 
 
 def get_valid_integer(prompt):
-    """
-    Keeps asking until the user enters a valid integer.
-    :param prompt: string, the message to display
-    :return: int, the validated integer
-    """
+    """Keeps asking until the user enters a valid integer."""
     while True:
         try:
             value = int(input(prompt))
@@ -415,10 +425,7 @@ def get_valid_integer(prompt):
 # -------------------- MAIN MENU --------------------
 
 def show_menu():
-    """
-    Displays the main menu options.
-    :return: None
-    """
+    """Displays the main menu options."""
     print("\n" + "=" * 45)
     print("  FINANCIAL HEALTH SCANNER - MAIN MENU")
     print("=" * 45)
@@ -431,17 +438,12 @@ def show_menu():
 
 
 def main():
-    """
-    Main function that runs the program loop.
-    Controls the menu and calls other functions.
-    :return: None
-    """
+    """Main function that runs the program loop."""
     print("\n" + "*" * 50)
     print("  Welcome to the Financial Health Scanner!")
     print("  Analyze any company's financial health.")
     print("*" * 50)
 
-    # This list will store all analysis results
     all_results = []
     companies = {}
 
@@ -450,7 +452,6 @@ def main():
         choice = input("  Choose an option (1-5): ").strip()
 
         if choice == "1":
-            # Load companies from file
             filename = input("  Enter filename (default: companies.txt): ").strip()
             if len(filename) == 0:
                 filename = "companies.txt"
@@ -464,7 +465,6 @@ def main():
                     display_result(result)
 
         elif choice == "2":
-            # Manual company entry
             user_input = get_company_from_user()
 
             if user_input is not None:
@@ -476,14 +476,12 @@ def main():
                 print("  (Company added to current session)")
 
         elif choice == "3":
-            # Show ranking
             if len(all_results) == 0:
                 print("\n  No companies loaded yet. Use option 1 or 2 first.")
             else:
                 display_ranking(all_results)
 
         elif choice == "4":
-            # Save report
             if len(all_results) == 0:
                 print("\n  No companies to report. Use option 1 or 2 first.")
             else:
@@ -501,5 +499,5 @@ def main():
             print("\n  Invalid choice. Please enter 1, 2, 3, 4, or 5.")
 
 
-# -------------------- RUN THE PROGRAM --------------------
-main()
+if __name__ == "__main__":
+    main()
