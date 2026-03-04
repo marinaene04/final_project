@@ -1,0 +1,18 @@
+# Company Financial Data
+# Format: company_name,sector,revenue,costs,debt,cash,employees
+# Revenue, Costs, Debt, Cash are in millions of EUR
+Apple,Technology,394328,310810,111088,62482,164000
+Tesla,Automotive,96773,82178,5748,29094,140473
+Amazon,Technology,574785,534827,67130,73387,1551000
+Netflix,Entertainment,33723,27520,14143,7116,13000
+Meta,Technology,134902,87747,37228,65401,67317
+Zara_Inditex,Retail,35948,24762,7942,10456,174000
+BBVA,Banking,31002,18132,45891,8820,115751
+Repsol,Energy,55768,49822,8714,4327,25000
+Telefonica,Telecom,40897,35834,37578,7832,104000
+SpaceX,Aerospace,8700,7656,2500,3200,13000
+Spotify,Entertainment,13247,12187,1882,4314,9132
+Nvidia,Technology,60922,30123,9709,25984,29600
+Santander,Banking,57942,34276,52819,12453,197005
+Toyota,Automotive,274491,241553,178262,45891,375235
+Samsung,Technology,200734,172631,28102,65423,267800

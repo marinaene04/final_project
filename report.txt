@@ -1,0 +1,76 @@
+COMPANY FINANCIAL HEALTH REPORT
+==================================================
+
+Company: Apple
+  Revenue:          $394,328M
+  Profit Margin:    30.26%
+  Debt-to-Revenue:  28.18%
+  Cash Runway:      Profitable (no burn)
+  Rev/Employee:     $13.6M
+  GRADE:            A (8/9)
+--------------------------------------------------
+
+Company: Microsoft
+  Revenue:          $211,915M
+  Profit Margin:    27.87%
+  Debt-to-Revenue:  37.68%
+  Cash Runway:      Profitable (no burn)
+  Rev/Employee:     $6.23M
+  GRADE:            A (8/9)
+--------------------------------------------------
+
+Company: Tesla
+  Revenue:          $96,773M
+  Profit Margin:    15.09%
+  Debt-to-Revenue:  13.27%
+  Cash Runway:      Profitable (no burn)
+  Rev/Employee:     $3.72M
+  GRADE:            A (8/9)
+--------------------------------------------------
+
+Company: Amazon
+  Revenue:          $574,785M
+  Profit Margin:    7.47%
+  Debt-to-Revenue:  11.68%
+  Cash Runway:      Profitable (no burn)
+  Rev/Employee:     $6.68M
+  GRADE:            B (7/9)
+--------------------------------------------------
+
+Company: Netflix
+  Revenue:          $33,723M
+  Profit Margin:    19.73%
+  Debt-to-Revenue:  43.0%
+  Cash Runway:      Profitable (no burn)
+  Rev/Employee:     $4.89M
+  GRADE:            B (6/9)
+--------------------------------------------------
+
+Company: Spotify
+  Revenue:          $15,670M
+  Profit Margin:    3.0%
+  Debt-to-Revenue:  51.05%
+  Cash Runway:      Profitable (no burn)
+  Rev/Employee:     $4.48M
+  GRADE:            C (5/9)
+--------------------------------------------------
+
+Company: GameStop
+  Revenue:          $5,272M
+  Profit Margin:    -5.65%
+  Debt-to-Revenue:  4.36%
+  Cash Runway:      35.9 months
+  Rev/Employee:     $5.27M
+  GRADE:            C (5/9)
+--------------------------------------------------
+
+Company: WeWork
+  Revenue:          $1,800M
+  Profit Margin:    -61.11%
+  Debt-to-Revenue:  100.0%
+  Cash Runway:      3.5 months
+  Rev/Employee:     $9.0M
+  GRADE:            F (0/9)
+--------------------------------------------------
+
+END OF REPORT
